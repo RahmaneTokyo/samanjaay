@@ -8,7 +8,8 @@ import {Router} from "@angular/router";
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     // baseUrl = 'https://samanjaayback-production.up.railway.app/';
-    baseUrl = 'https://samanjaay-back.onrender.com/';
+    // baseUrl = 'https://samanjaay-back.onrender.com/';
+    baseUrl = 'http://localhost:3000/';
 
     private _authenticated: boolean = false;
     private _httpClient = inject(HttpClient);

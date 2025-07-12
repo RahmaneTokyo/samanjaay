@@ -37,7 +37,7 @@ export class SidemenuComponent implements OnInit {
         if (token) {
             const decoded = jwtDecode(localStorage.getItem('accessToken'));
             this.role = decoded.role;
-            this.getUserInfos(+decoded.id);
+            this.getUserInfos(+decoded.sub);
         }
 
         /* Theme */

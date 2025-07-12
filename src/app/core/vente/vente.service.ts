@@ -9,7 +9,8 @@ import {PageResponse} from "../../shared/models/page.response";
 })
 export class VenteService {
     // baseUrl = 'https://samanjaayback-production.up.railway.app/api/factures';
-    baseUrl = 'https://samanjaay-back.onrender.com/api/factures';
+    // baseUrl = 'https://samanjaay-back.onrender.com/api/factures';
+    baseUrl = 'http://localhost:3000/api/factures';
 
     constructor(private http: HttpClient) { }
 

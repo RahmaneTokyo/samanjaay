@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
         const token = localStorage.getItem('accessToken');
         if (token) {
             const decoded = jwtDecode(localStorage.getItem('accessToken'));
-            this.getUserInfos(+decoded.id);
+            this.getUserInfos(+decoded.sub);
         }
     }
 
