@@ -36,7 +36,6 @@ export class SidemenuComponent implements OnInit {
         const token = localStorage.getItem('accessToken');
         if (token) {
             const decoded = jwtDecode(localStorage.getItem('accessToken'));
-            this.role = decoded.role;
             this.getUserInfos(+decoded.sub);
         }
 
@@ -68,6 +67,7 @@ export class SidemenuComponent implements OnInit {
         this.userService.getOneUser(id).subscribe(
             data => {
                 this.user = data;
+                this.role = this.user.role;
             }
         );
     }
