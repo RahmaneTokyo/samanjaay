@@ -30,6 +30,8 @@
                             "crypto-js/enc-base64",
                             "quill-delta",
                             "html2canvas",
+                            "rgbcolor",
+                            "raf",
                             "core-js",
                             "canvg"
                         ],
