@@ -1,0 +1,116 @@
+<div class="w-full h-full flex items-center justify-center" >
+    @if (user) {
+        <div class="p-5 rounded shadow-lg flex flex-col gap-5 items-center text-center max-w-lg">
+            <div class="w-full">
+                <img src="assets/images/logo/SamaNjaay-left.png" class="w-30" alt="">
+            </div>
+            <div class="w-fit">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-primary size-60">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+            </div>
+            <div class="text-lg">
+                <label class="text-5xl font-fredoka">{{ user.prenom }} {{ user.nom }}</label>
+                <p class="text-gray-500">{{ user.email }}</p>
+            </div>
+
+            <div class="w-full flex justify-between text-white gap-10">
+                <button (click)="editInfo('infos')" type="button" class="px-4 py-2 rounded bg-primary hover:bg-primary-700 duration-300">Modifier mes informations</button>
+                <button (click)="editInfo('password')" type="button" class="px-4 py-2 rounded bg-primary hover:bg-primary-700 duration-300">Modifier mon mot de passe</button>
+            </div>
+        </div>
+    } @else {
+        <app-loader/>
+    }
+</div>
+
+<ng-template #editInfos>
+    <div class="dark:text-black">
+        @if (type === 'infos') {
+            <div class="flex justify-between">
+                <h1 class="font-fredoka text-xl">Modifier vos informations</h1>
+                <button matDialogClose>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form class="my-5 grid grid-cols-2 gap-5">
+                <div>
+                    <input type="text" [(ngModel)]="prenom" name="prenom" class="border border-gray-300 w-full rounded hover:border-primary focus:ring focus:ring-primary duration-300 p-3 placeholder:text-gray-500" placeholder="Prenom" required>
+                </div>
+
+                <div>
+                    <input type="text" [(ngModel)]="nom" name="nom" class="border border-gray-300 w-full rounded hover:border-primary focus:ring focus:ring-primary duration-300 p-3 placeholder:text-gray-500" placeholder="Nom" required>
+                </div>
+
+                <div class="col-span-2">
+                    @if (loader) {
+                        <button class="cursor-not-allowed bg-primary-300 rounded-lg text-white flex justify-center py-4 px-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 animate-spin">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </button>
+                    } @else {
+                        <button (click)="edituser()" class="bg-primary px-3 py-2 rounded text-white hover:bg-primary-700 disabled:bg-primary-400 disabled:cursor-not-allowed duration-300">Enregistrer</button>
+                    }
+                </div>
+            </form>
+        }
+        @if (type == 'password') {
+            <div class="flex justify-between">
+                <h1 class="font-fredoka text-xl">Modifier votre mot de passe</h1>
+                <button matDialogClose>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form class="my-5 grid gap-5" #pwdForm="ngForm">
+                <div>
+                    <input type="password" ngModel #prevPassword="ngModel" name="prev" class="border border-gray-300 w-full rounded hover:border-primary focus:ring focus:ring-primary duration-300 p-3 placeholder:text-gray-500" placeholder="Ancien mot de passe" required>
+                    @if (prevPassword.invalid && prevPassword.touched) {
+                        <small class="text-red-500">Ce champ est requis</small>
+                    }
+                </div>
+
+                <div>
+                    <input type="password" ngModel #newPassword="ngModel" name="new" minlength="6" class="border border-gray-300 w-full rounded hover:border-primary focus:ring focus:ring-primary duration-300 p-3 placeholder:text-gray-500" placeholder="Nouveau mot de passe" required>
+                    @if (newPassword.invalid && newPassword.touched) {
+                        <small class="text-red-500">Ce champ est requis</small>
+                    }
+                    @if (newPassword.touched && newPassword.value.length < 6) {
+                        <small class="text-red-500">Le mot de passe doit avoir au moins 6 caractères</small>
+                    }
+                </div>
+
+                <div>
+                    <input type="password" ngModel #confirmPassword="ngModel" name="confirm" class="border border-gray-300 w-full rounded hover:border-primary focus:ring focus:ring-primary duration-300 p-3 placeholder:text-gray-500" placeholder="Confirmer mot de passe" required>
+                    @if (confirmPassword.dirty && confirmPassword.value !== newPassword.value) {
+                        <small class="text-red-500">Les mots de passes ne sont pas identiques</small>
+                    }
+                </div>
+
+                <div>
+                    @if (loader) {
+                        <button class="cursor-not-allowed bg-primary-300 rounded-lg text-white flex justify-center py-4 px-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 animate-spin">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </button>
+                    } @else {
+                        <button [disabled]="pwdForm.invalid" (click)="editPassword(pwdForm.value)" class="bg-primary px-3 py-2 rounded text-white hover:bg-primary-700 disabled:bg-primary-400 disabled:cursor-not-allowed duration-300">Enregistrer</button>
+                    }
+                </div>
+
+                @if (error) {
+                    <div class="text-center">
+                        <small class="text-red-500 text-md">Le mot de passe est invalide</small>
+                    </div>
+                }
+            </form>
+        }
+    </div>
+</ng-template>

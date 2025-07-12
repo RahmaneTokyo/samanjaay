@@ -1,0 +1,15 @@
+<div class="flex w-full items-center justify-end space-x-4 p-4 font-medium">
+    <div class="flex w-full flex-1 items-center space-x-2">
+        <span>Page:</span>
+        <span> {{ page() + 1 }}/{{ totalPages() }} </span>
+    </div>
+
+    <button mat-raised-button class="hover:bg-primary hover:text-white transition duration-300" (click)="onPrev()" [hidden]="page() === 0">
+        <span class="ml-2">précédent</span>
+        <mat-icon svgIcon="mat_solid:chevron_left" class="icon-size-4"></mat-icon>
+    </button>
+    <button class="hover:bg-primary hover:text-white duration-300 transition" mat-raised-button (click)="onNext()" [hidden]="page() === pages().length - 1">
+        <span class="order-1 mr-2">suivant</span>
+        <mat-icon svgIcon="mat_solid:chevron_right" class="order-2 icon-size-4"></mat-icon>
+    </button>
+</div>

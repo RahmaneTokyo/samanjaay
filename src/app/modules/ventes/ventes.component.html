@@ -1,0 +1,110 @@
+@if (ventes) {
+    <div class="flex h-full p-5">
+        <div class="p-5 grid gap-5 h-fit w-full">
+            <div class="flex justify-between items-center">
+                <label class="font-fredoka text-2xl">Liste des ventes</label>
+
+                <button (click)="addVente()" class="dark:text-white text-primary flex items-center gap-2 px-3 py-2 font-bold shadow-lg duration-300 rounded-lg hover:bg-primary hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Enregistrer une vente
+                </button>
+            </div>
+
+            <!-- Table -->
+            <div class="flex flex-col gap-3 items-end">
+                <button (click)="exportToExcel()" class="w-fit ext-primary px-3 py-2 duration-300 rounded-lg hover:bg-primary hover:text-white text-primary dark:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                    </svg>
+                </button>
+                <table id="ventes" class="table-auto w-full border-separate border-spacing-y-3 shadow-lg">
+                    <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="py-3 rounded-tl-lg">Numéro</th>
+                        <th class="py-3">Description</th>
+                        <th class="py-3">Prix unitaire</th>
+                        <th class="py-3">Quantité</th>
+                        <th class="py-3">Montant total</th>
+                        <th class="py-3">Date de vente</th>
+                        <th class="py-3 rounded-tr-lg">Client</th>
+<!--                        <th class="py-3 rounded-r-lg">Action</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of ventes; track item) {
+                            <tr class="text-center">
+                                <td> {{ item.numero }} </td>
+                                <td> {{ item.description }} </td>
+                                <td> {{ item.prix | currency:'XOF':'symbol':'1.0-0':'fr-FR' }} </td>
+                                <td> {{ item.quantite }} </td>
+                                <td> {{ item.prixTotal | currency:'XOF':'symbol':'1.0-0':'fr-FR' }} </td>
+                                <td> {{ item.dateCreation | date: 'dd-MM-YYYY' }} </td>
+                                <td> {{ item.prenomClient }} {{ item.nomClient }} </td>
+                                <!--<td class="flex justify-center">
+                                    <button type="button" (click)="infos(item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-primary cursor-pointer">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                                        </svg>
+                                    </button>
+                                </td>-->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between mt-6 space-x-2">
+                <button
+                    class="px-3 py-1 rounded hover:bg-primary hover:text-white duration-300"
+                    [hidden]="currentPage === 1"
+                    (click)="goToPage(currentPage - 1)"
+                >
+                    Précédent
+                </button>
+
+                <div class="flex gap-5">
+                    <ng-container *ngFor="let page of totalPagesArray">
+                        <button class="px-3 py-1 rounded"
+                                [ngClass]="{
+                            'bg-blue-600 text-white': page === currentPage,
+                            'bg-gray-200 dark:bg-gray-700 hover:bg-primary dark:hover:bg-primary duration-300 hover:text-white': page !== currentPage
+                        }" (click)="goToPage(page)">
+                            {{ page }}
+                        </button>
+                    </ng-container>
+                </div>
+
+                <div class="flex gap-3 items-center">
+                    <label>Nombre d'éléments par page</label>
+                    <select [(ngModel)]="limit" class="p-2 appearance-none bg-transparent rounded border cursor-pointer border-none hover:ring hover:ring-primary focus:ring focus:ring-primary duration-300" (change)="loadData()">
+                        <option value="5" selected="selected">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+
+                <button
+                    class="px-3 py-1 rounded hover:bg-primary hover:text-white duration-300"
+                    [hidden]="currentPage === totalPages"
+                    (click)="goToPage(currentPage + 1)"
+                >
+                    Suivant
+                </button>
+            </div>
+        </div>
+
+        @if (selectedItem) {
+            <div class="w-2/6 h-screen p-5 shadow-lg flex flex-col">
+                <app-vente-detail [item]="vente"/>
+            </div>
+        }
+
+    </div>
+} @else {
+    <div class="flex items-center justify-center h-full">
+        <app-loader/>
+    </div>
+}
