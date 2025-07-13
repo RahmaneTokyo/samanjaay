@@ -94,7 +94,7 @@ export class AuthSignUpComponent implements OnInit {
         this.showAlert = false;
 
         // Sign up
-        this._authService.signUp(this.signUpForm.value).subscribe(
+        /*this._authService.signUp(this.signUpForm.value).subscribe(
             (response) => {
                 // Navigate to the confirmation required page
                 this._router.navigateByUrl('/confirmation-required');
@@ -115,6 +115,6 @@ export class AuthSignUpComponent implements OnInit {
                 // Show the alert
                 this.showAlert = true;
             }
-        );
+        );*/
     }
 }

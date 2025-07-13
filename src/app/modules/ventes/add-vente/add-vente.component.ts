@@ -15,6 +15,8 @@ import {VenteService} from "../../../core/vente/vente.service";
 export class AddVenteComponent {
     @Output() formCompleted = new EventEmitter<void>();
     loader = false;
+    errorMessage = '';
+    errors = false;
 
     constructor(private venteService: VenteService, private dialogRef: MatDialogRef<AddVenteComponent>) { }
 
@@ -28,7 +30,11 @@ export class AddVenteComponent {
                 this.dialogRef.close(result);
 
             }, error => {
+                this.errors = true;
                 this.loader = false;
+                if (error.status === 400) {
+                    this.errorMessage = error.error.message;
+                }
                 console.log(error.error.message);
             }
         );

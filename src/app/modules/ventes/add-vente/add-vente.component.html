@@ -56,6 +56,10 @@
         }
     </div>
 
+    @if (errors) {
+        <small class="text-red-500 block">{{ errorMessage }}</small>
+    }
+
     <div>
         @if (loader) {
             <button class="cursor-not-allowed bg-primary-300 rounded-lg text-white flex justify-center py-4 px-5">
