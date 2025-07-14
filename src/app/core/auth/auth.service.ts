@@ -7,8 +7,7 @@ import {Router} from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    baseUrl = 'https://samanjaayback-production.up.railway.app/';
-    // baseUrl = 'https://samanjaay-back.onrender.com/';
+    baseUrl = 'https://samanjaay-back.onrender.com/';
     // baseUrl = 'http://localhost:3000/';
 
     private _authenticated: boolean = false;
@@ -165,30 +164,4 @@ export class AuthService {
     confirmReset(resetToken: any) {
         return this._httpClient.post(`${this.baseUrl}api/auth/confirm`, resetToken);
     }
-
-    /**
-     * Check the authentication status
-     */
-    /*check(): Observable<boolean> {
-        // Check if the user is logged in
-        if (this._authenticated) {
-            return of(true);
-        }
-
-        // Check the access token availability
-        if (!this.accessToken) {
-            this._authenticated = false;
-            return of(false);
-        }
-
-        // Check the access token expire date
-        if (AuthUtils.isTokenExpired(this.accessToken)) {
-            this._authenticated = false;
-            return of(false);
-        }
-
-        // If the access token exists, and it didn't expire, sign in using it
-        // return this.signInUsingToken();
-        return of(true);
-    }*/
 }

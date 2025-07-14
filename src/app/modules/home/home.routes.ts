@@ -3,6 +3,7 @@ import {HomeComponent} from "./home.component";
 import {DashboardComponent} from "../dashboard/dashboard.component";
 import {VentesComponent} from "../ventes/ventes.component";
 import {ProfileComponent} from "../profile/profile.component";
+import {UtilisateursComponent} from "../utilisateurs/utilisateurs.component";
 
 export default [
     {
@@ -13,6 +14,7 @@ export default [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'ventes', component: VentesComponent },
             { path: 'profile', component: ProfileComponent },
+            { path: 'utilisateurs', component: UtilisateursComponent },
         ],
     }
 ] as Routes

@@ -18,6 +18,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 import {of} from "rxjs";
+import {jwtDecode} from "jwt-decode";
+import {UserService} from "../../../core/user/user.service";
 
 @Component({
     selector: 'auth-sign-in',
@@ -42,7 +44,7 @@ export class AuthSignInComponent implements OnInit {
     error = false;
     errMessage: string;
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private authService: AuthService, private router: Router, private userService: UserService) {}
     ngOnInit() {}
 
     login(value: any) {
@@ -51,12 +53,22 @@ export class AuthSignInComponent implements OnInit {
         this.authService.signIn(value).subscribe(
             result => {
                 this.loader = false;
-                this.router.navigate(['/home']);
+                console.log(result)
+                const role = jwtDecode(result.access_token).role;
+
+                if (role == 'USER') {
+                    this.router.navigate(['/home']);
+                }
+
+                if (role == 'ADMIN') {
+                    this.router.navigate(['/home/utilisateurs']);
+                }
+
             }, err => {
                 this.loader = false;
                 this.error = true
                 if (err.status === 401) {
-                    this.errMessage = 'Identifiants incorrects';
+                    this.errMessage = err.error.message;
                 }
             }
         );

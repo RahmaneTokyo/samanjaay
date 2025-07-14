@@ -6,4 +6,5 @@ export interface User {
     adresse: string;
     phone: string;
     role: string;
+    active: boolean;
 }
