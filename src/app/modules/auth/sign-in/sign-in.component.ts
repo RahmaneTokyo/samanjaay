@@ -53,16 +53,19 @@ export class AuthSignInComponent implements OnInit {
         this.authService.signIn(value).subscribe(
             result => {
                 this.loader = false;
-                console.log(result)
-                const role = jwtDecode(result.access_token).role;
+                const id = jwtDecode(result.access_token).sub;
 
-                if (role == 'USER') {
-                    this.router.navigate(['/home']);
-                }
+                this.userService.getOneUser(+id).subscribe(user => {
+                    const role = user.role;
 
-                if (role == 'ADMIN') {
-                    this.router.navigate(['/home/utilisateurs']);
-                }
+                    if (role == 'USER') {
+                        this.router.navigate(['/home']);
+                    }
+
+                    if (role == 'ADMIN') {
+                        this.router.navigate(['/home/utilisateurs']);
+                    }
+                })
 
             }, err => {
                 this.loader = false;
